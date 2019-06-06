@@ -2,6 +2,8 @@
 #ifndef ANDRES_GRAPH_ADJACENCY_HXX
 #define ANDRES_GRAPH_ADJACENCY_HXX
 
+#include <iostream>
+
 namespace andres {
 namespace graph {
 

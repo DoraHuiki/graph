@@ -16,9 +16,9 @@ namespace andres {
 // http://hci.iwr.uni-heidelberg.de/opengm2/
 //
 template<
-    class Key, 
-    class Comparison = std::less<Key>, 
-    class Allocator = std::allocator<Key> 
+    class Key,
+    class Comparison = std::less<Key>,
+    class Allocator = std::allocator<Key>
 >
 class RandomAccessSet {
 private:
