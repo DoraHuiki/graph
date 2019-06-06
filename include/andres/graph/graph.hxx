@@ -25,11 +25,11 @@ namespace graph {
 /// Undirected graph, implemented as an adjacency list.
 template<typename VISITOR = IdleGraphVisitor<std::size_t> >
 class Graph {
-public: 
+public:
     typedef VISITOR Visitor;
     typedef detail::VertexIterator VertexIterator;
     typedef detail::EdgeIterator EdgeIterator;
-    typedef detail::Adjacencies::const_iterator AdjacencyIterator;    
+    typedef detail::Adjacencies::const_iterator AdjacencyIterator;
     typedef typename AdjacencyIterator::value_type AdjacencyType;
 
     // construction
@@ -451,7 +451,7 @@ inline typename Graph<VISITOR>::VertexIterator
 Graph<VISITOR>::verticesFromVertexBegin(
     const std::size_t vertex
 ) const { 
-    return vertices_[vertex].begin(); 
+    return vertices_[vertex].begin();
 }
 
 /// Get an iterator to the end of the sequence of vertices reachable from a given vertex via a single edge.
