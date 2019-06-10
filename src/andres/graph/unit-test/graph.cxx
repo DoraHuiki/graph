@@ -2,8 +2,8 @@
 
 #include "andres/graph/graph.hxx"
 
-inline void test(const bool& pred) { 
-  if(!pred) throw std::runtime_error("Test failed."); 
+inline void test(const bool& pred) {
+  if(!pred) throw std::runtime_error("Test failed.");
 }
 
 void testConstruction() {
@@ -163,8 +163,8 @@ void testEdgeInsertion() {
     test(g.numberOfEdgesFromVertex(0) == 4);
     test(g.numberOfEdgesToVertex(0) == 4);
 
-    test(g.vertexFromVertex(0, 0) == 1);        
-    test(g.vertexToVertex(0, 0) == 1);              
+    test(g.vertexFromVertex(0, 0) == 1);
+    test(g.vertexToVertex(0, 0) == 1);
     test(g.edgeFromVertex(0, 0) == 1);
     test(g.edgeToVertex(0, 0) == 1);
     test(g.adjacencyFromVertex(0, 0).vertex() == 1);
@@ -173,7 +173,7 @@ void testEdgeInsertion() {
     test(g.adjacencyToVertex(0, 0).edge() == 1);
 
     test(g.vertexFromVertex(0, 1) == 1);
-    test(g.vertexToVertex(0, 1) == 1);        
+    test(g.vertexToVertex(0, 1) == 1);
     test(g.edgeFromVertex(0, 1) == 8);
     test(g.edgeToVertex(0, 1) == 8);
     test(g.adjacencyFromVertex(0, 1).vertex() == 1);
@@ -182,7 +182,7 @@ void testEdgeInsertion() {
     test(g.adjacencyToVertex(0, 1).edge() == 8);
 
     test(g.vertexFromVertex(0, 2) == 2);
-    test(g.vertexToVertex(0, 2) == 2);        
+    test(g.vertexToVertex(0, 2) == 2);
     test(g.edgeFromVertex(0, 2) == 4);
     test(g.edgeToVertex(0, 2) == 4);
     test(g.adjacencyFromVertex(0, 2).vertex() == 2);
@@ -191,7 +191,7 @@ void testEdgeInsertion() {
     test(g.adjacencyToVertex(0, 2).edge() == 4);
 
     test(g.vertexFromVertex(0, 3) == 2);
-    test(g.vertexToVertex(0, 3) == 2);        
+    test(g.vertexToVertex(0, 3) == 2);
     test(g.edgeFromVertex(0, 3) == 5);
     test(g.edgeToVertex(0, 3) == 5);
     test(g.adjacencyFromVertex(0, 3).vertex() == 2);
@@ -205,8 +205,8 @@ void testEdgeInsertion() {
     test(g.numberOfEdgesFromVertex(1) == 5);
     test(g.numberOfEdgesToVertex(1) == 5);
 
-    test(g.vertexFromVertex(1, 0) == 0);        
-    test(g.vertexToVertex(1, 0) == 0);        
+    test(g.vertexFromVertex(1, 0) == 0);
+    test(g.vertexToVertex(1, 0) == 0);
     test(g.edgeFromVertex(1, 0) == 1);
     test(g.edgeToVertex(1, 0) == 1);
     test(g.adjacencyFromVertex(1, 0).vertex() == 0);
@@ -256,8 +256,8 @@ void testEdgeInsertion() {
     test(g.numberOfEdgesFromVertex(2) == 5);
     test(g.numberOfEdgesToVertex(2) == 5);
 
-    test(g.vertexFromVertex(2, 0) == 0);        
-    test(g.vertexToVertex(2, 0) == 0);        
+    test(g.vertexFromVertex(2, 0) == 0);
+    test(g.vertexToVertex(2, 0) == 0);
     test(g.edgeFromVertex(2, 0) == 4);
     test(g.edgeToVertex(2, 0) == 4);
     test(g.adjacencyFromVertex(2, 0).vertex() == 0);
@@ -477,7 +477,7 @@ void testEdgeRemoval() {
   test(g.vertexOfEdge(2, 1) == 1);
 }
 
-void testVertexRemoval() 
+void testVertexRemoval()
 {
   andres::graph::Graph<> g(3);
   g.multipleEdgesEnabled() = true;
@@ -592,13 +592,13 @@ void testfindEdge() {
 
 void testMultipleEdges() {
   andres::graph::Graph<> g(4);
-  g.insertEdge(0, 1); 
+  g.insertEdge(0, 1);
   test(g.numberOfEdges() == 1);
   test(g.insertEdge(0, 1) == 0);
   test(g.numberOfEdges() == 1);
 
   g.multipleEdgesEnabled() = true;
-  g.insertEdge(0, 1); 
+  g.insertEdge(0, 1);
   test(g.numberOfEdges() == 2);
   test(g.vertexOfEdge(0, 0) == 0);
   test(g.vertexOfEdge(0, 1) == 1);

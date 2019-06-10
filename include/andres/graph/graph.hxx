@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <iterator> // std::random_access_iterator
 #include <vector>
-#include <set> 
+#include <set>
 #include <iostream>
 #include <utility> // std::pair
 #include <algorithm> // std::fill
@@ -95,7 +95,7 @@ private:
 /// \param visitor Visitor to follow changes of integer indices of vertices and edges.
 ///
 template<typename VISITOR>
-inline 
+inline
 Graph<VISITOR>::Graph(
     const Visitor& visitor
 )
@@ -111,7 +111,7 @@ Graph<VISITOR>::Graph(
 /// \param visitor Visitor to follow changes of integer indices of vertices and edges.
 ///
 template<typename VISITOR>
-inline 
+inline
 Graph<VISITOR>::Graph(
     const std::size_t numberOfVertices,
     const Visitor& visitor
@@ -157,21 +157,21 @@ Graph<VISITOR>::assign(
     visitor_ = visitor;
     visitor_.insertVertices(0, numberOfVertices);
 }
-    
+
 /// Get the number of vertices.
 ///
 template<typename VISITOR>
 inline std::size_t
-Graph<VISITOR>::numberOfVertices() const { 
-    return vertices_.size(); 
+Graph<VISITOR>::numberOfVertices() const {
+    return vertices_.size();
 }
 
 /// Get the number of edges.
 ///
 template<typename VISITOR>
 inline std::size_t
-Graph<VISITOR>::numberOfEdges() const { 
-    return edges_.size(); 
+Graph<VISITOR>::numberOfEdges() const {
+    return edges_.size();
 }
 
 /// Get the number of edges that originate from a given vertex.
@@ -184,7 +184,7 @@ template<typename VISITOR>
 inline std::size_t
 Graph<VISITOR>::numberOfEdgesFromVertex(
     const std::size_t vertex
-) const { 
+) const {
     return vertices_[vertex].size();
 }
 
@@ -198,7 +198,7 @@ template<typename VISITOR>
 inline std::size_t
 Graph<VISITOR>::numberOfEdgesToVertex(
     const std::size_t vertex
-) const { 
+) const {
     return vertices_[vertex].size();
 }
 
@@ -255,7 +255,7 @@ Graph<VISITOR>::edgeToVertex(
 /// \param vertex Integer index of a vertex.
 /// \param j Number of the vertex; between 0 and numberOfEdgesFromVertex(vertex) - 1.
 ///
-/// \sa numberOfEdgesFromVertex() 
+/// \sa numberOfEdgesFromVertex()
 ///
 template<typename VISITOR>
 inline std::size_t
@@ -271,7 +271,7 @@ Graph<VISITOR>::vertexFromVertex(
 /// \param vertex Integer index of a vertex.
 /// \param j Number of the vertex; between 0 and numberOfEdgesFromVertex(vertex) - 1.
 ///
-/// \sa numberOfEdgesFromVertex() 
+/// \sa numberOfEdgesFromVertex()
 ///
 template<typename VISITOR>
 inline std::size_t
@@ -319,22 +319,22 @@ Graph<VISITOR>::insertVertices(
 /// \param vertexIndex0 Integer index of the first vertex in the edge.
 /// \param vertexIndex1 Integer index of the second vertex in the edge.
 /// \return Integer index of the newly inserted edge.
-/// 
+///
 template<typename VISITOR>
 inline std::size_t
 Graph<VISITOR>::insertEdge(
     const std::size_t vertexIndex0,
     const std::size_t vertexIndex1
 ) {
-    assert(vertexIndex0 < numberOfVertices()); 
-    assert(vertexIndex1 < numberOfVertices()); 
-    
+    assert(vertexIndex0 < numberOfVertices());
+    assert(vertexIndex1 < numberOfVertices());
+
     if(multipleEdgesEnabled()) {
 insertEdgeMark:
         edges_.push_back(Edge(vertexIndex0, vertexIndex1));
         std::size_t edgeIndex = edges_.size() - 1;
         insertAdjacenciesForEdge(edgeIndex);
-        visitor_.insertEdge(edgeIndex);  
+        visitor_.insertEdge(edgeIndex);
         return edgeIndex;
     }
     else {
@@ -351,20 +351,20 @@ insertEdgeMark:
 /// Erase a vertex and all edges connecting this vertex.
 ///
 /// \param vertexIndex Integer index of the vertex to be erased.
-/// 
+///
 template<typename VISITOR>
-void 
+void
 Graph<VISITOR>::eraseVertex(
     const std::size_t vertexIndex
 ) {
-    assert(vertexIndex < numberOfVertices()); 
+    assert(vertexIndex < numberOfVertices());
 
     // erase all edges connected to the vertex
     while(vertices_[vertexIndex].size() != 0) {
         eraseEdge(vertices_[vertexIndex].begin()->edge());
     }
 
-    if(vertexIndex == numberOfVertices()-1) { // if the last vertex is to be erased        
+    if(vertexIndex == numberOfVertices()-1) { // if the last vertex is to be erased
         vertices_.pop_back(); // erase vertex
         visitor_.eraseVertex(vertexIndex);
     }
@@ -378,10 +378,10 @@ Graph<VISITOR>::eraseVertex(
         it != vertices_[movingVertexIndex].end(); ++it) {
             affectedEdgeIndices.insert(it->edge());
         }
-        
+
         // for all affected edges:
         for(std::set<std::size_t>::const_iterator it = affectedEdgeIndices.begin();
-        it != affectedEdgeIndices.end(); ++it) { 
+        it != affectedEdgeIndices.end(); ++it) {
             // remove adjacencies
             eraseAdjacenciesForEdge(*it);
 
@@ -403,7 +403,7 @@ Graph<VISITOR>::eraseVertex(
 
         // insert adjacencies for edges of moved vertex
         for(std::set<std::size_t>::const_iterator it = affectedEdgeIndices.begin();
-        it != affectedEdgeIndices.end(); ++it) { 
+        it != affectedEdgeIndices.end(); ++it) {
             insertAdjacenciesForEdge(*it);
         }
 
@@ -415,20 +415,20 @@ Graph<VISITOR>::eraseVertex(
 /// Erase an edge.
 ///
 /// \param edgeIndex Integer index of the edge to be erased.
-/// 
+///
 template<typename VISITOR>
-inline void 
+inline void
 Graph<VISITOR>::eraseEdge(
     const std::size_t edgeIndex
 ) {
-    assert(edgeIndex < numberOfEdges()); 
+    assert(edgeIndex < numberOfEdges());
 
     eraseAdjacenciesForEdge(edgeIndex);
     if(edgeIndex == numberOfEdges() - 1) { // if the last edge is erased
         edges_.pop_back(); // delete
         visitor_.eraseEdge(edgeIndex);
     }
-    else { 
+    else {
         std::size_t movingEdgeIndex = numberOfEdges() - 1;
         eraseAdjacenciesForEdge(movingEdgeIndex);
         edges_[edgeIndex] = edges_[movingEdgeIndex]; // copy
@@ -443,14 +443,14 @@ Graph<VISITOR>::eraseEdge(
 ///
 /// \param vertex Integer index of the vertex.
 /// \return VertexIterator.
-/// 
+///
 /// \sa verticesFromVertexEnd()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::VertexIterator 
+inline typename Graph<VISITOR>::VertexIterator
 Graph<VISITOR>::verticesFromVertexBegin(
     const std::size_t vertex
-) const { 
+) const {
     return vertices_[vertex].begin();
 }
 
@@ -458,45 +458,45 @@ Graph<VISITOR>::verticesFromVertexBegin(
 ///
 /// \param vertex Integer index of the vertex.
 /// \return VertexIterator.
-/// 
+///
 /// \sa verticesFromVertexBegin()
-/// 
+///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::VertexIterator 
+inline typename Graph<VISITOR>::VertexIterator
 Graph<VISITOR>::verticesFromVertexEnd(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].end(); 
+) const {
+    return vertices_[vertex].end();
 }
 
 /// Get an iterator to the beginning of the sequence of vertices from which a given vertex is reachable via a single edge.
 ///
 /// \param vertex Integer index of the vertex.
 /// \return VertexIterator.
-/// 
+///
 /// \sa verticesToVertexEnd()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::VertexIterator 
+inline typename Graph<VISITOR>::VertexIterator
 Graph<VISITOR>::verticesToVertexBegin(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].begin(); 
+) const {
+    return vertices_[vertex].begin();
 }
 
 /// Get an iterator to the end of the sequence of vertices from which a given vertex is reachable via a single edge.
 ///
 /// \param vertex Integer index of the vertex.
 /// \return VertexIterator.
-/// 
+///
 /// \sa verticesToVertexBegin()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::VertexIterator 
+inline typename Graph<VISITOR>::VertexIterator
 Graph<VISITOR>::verticesToVertexEnd(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].end(); 
+) const {
+    return vertices_[vertex].end();
 }
 
 /// Get an iterator to the beginning of the sequence of edges that originate from a given vertex.
@@ -507,11 +507,11 @@ Graph<VISITOR>::verticesToVertexEnd(
 /// \sa edgesFromVertexEnd()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::EdgeIterator 
+inline typename Graph<VISITOR>::EdgeIterator
 Graph<VISITOR>::edgesFromVertexBegin(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].begin(); 
+) const {
+    return vertices_[vertex].begin();
 }
 
 /// Get an iterator to the end of the sequence of edges that originate from a given vertex.
@@ -522,11 +522,11 @@ Graph<VISITOR>::edgesFromVertexBegin(
 /// \sa edgesFromVertexBegin()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::EdgeIterator 
+inline typename Graph<VISITOR>::EdgeIterator
 Graph<VISITOR>::edgesFromVertexEnd(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].end(); 
+) const {
+    return vertices_[vertex].end();
 }
 
 /// Get an iterator to the beginning of the sequence of edges that are incident to a given vertex.
@@ -537,11 +537,11 @@ Graph<VISITOR>::edgesFromVertexEnd(
 /// \sa edgesToVertexEnd()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::EdgeIterator 
+inline typename Graph<VISITOR>::EdgeIterator
 Graph<VISITOR>::edgesToVertexBegin(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].begin(); 
+) const {
+    return vertices_[vertex].begin();
 }
 
 /// Get an iterator to the end of the sequence of edges that are incident to a given vertex.
@@ -552,11 +552,11 @@ Graph<VISITOR>::edgesToVertexBegin(
 /// \sa edgesToVertexBegin()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::EdgeIterator 
+inline typename Graph<VISITOR>::EdgeIterator
 Graph<VISITOR>::edgesToVertexEnd(
     const std::size_t vertex
-) const { 
-    return vertices_[vertex].end(); 
+) const {
+    return vertices_[vertex].end();
 }
 
 /// Get an iterator to the beginning of the sequence of adjacencies that originate from a given vertex.
@@ -567,7 +567,7 @@ Graph<VISITOR>::edgesToVertexEnd(
 /// \sa adjacenciesFromVertexEnd()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::AdjacencyIterator 
+inline typename Graph<VISITOR>::AdjacencyIterator
 Graph<VISITOR>::adjacenciesFromVertexBegin(
     const std::size_t vertex
 ) const {
@@ -582,7 +582,7 @@ Graph<VISITOR>::adjacenciesFromVertexBegin(
 /// \sa adjacenciesFromVertexBegin()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::AdjacencyIterator 
+inline typename Graph<VISITOR>::AdjacencyIterator
 Graph<VISITOR>::adjacenciesFromVertexEnd(
     const std::size_t vertex
 ) const {
@@ -597,7 +597,7 @@ Graph<VISITOR>::adjacenciesFromVertexEnd(
 /// \sa adjacenciesToVertexEnd()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::AdjacencyIterator 
+inline typename Graph<VISITOR>::AdjacencyIterator
 Graph<VISITOR>::adjacenciesToVertexBegin(
     const std::size_t vertex
 ) const {
@@ -612,7 +612,7 @@ Graph<VISITOR>::adjacenciesToVertexBegin(
 /// \sa adjacenciesToVertexBegin()
 ///
 template<typename VISITOR>
-inline typename Graph<VISITOR>::AdjacencyIterator 
+inline typename Graph<VISITOR>::AdjacencyIterator
 Graph<VISITOR>::adjacenciesToVertexEnd(
     const std::size_t vertex
 ) const {
@@ -624,7 +624,7 @@ Graph<VISITOR>::adjacenciesToVertexEnd(
 /// \param number Total number of vertices.
 ///
 template<typename VISITOR>
-inline void 
+inline void
 Graph<VISITOR>::reserveVertices(
     const std::size_t number
 ) {
@@ -636,7 +636,7 @@ Graph<VISITOR>::reserveVertices(
 /// \param number Total number of edges.
 ///
 template<typename VISITOR>
-inline void 
+inline void
 Graph<VISITOR>::reserveEdges(
     const std::size_t number
 ) {
@@ -675,7 +675,7 @@ Graph<VISITOR>::adjacencyToVertex(
 ///
 /// \param vertex0 first vertex of the edge.
 /// \param vertex1 second vertex of the edge.
-/// \return if an edge from vertex0 to vertex1 exists, pair.first is true 
+/// \return if an edge from vertex0 to vertex1 exists, pair.first is true
 ///     and pair.second is the index of such an edge. if no edge from vertex0
 ///     to vertex1 exists, pair.first is false and pair.second is undefined.
 ///
@@ -732,7 +732,7 @@ Graph<VISITOR>::multipleEdgesEnabled() {
 }
 
 template<typename VISITOR>
-inline void 
+inline void
 Graph<VISITOR>::insertAdjacenciesForEdge(
     const std::size_t edgeIndex
 ) {
@@ -750,7 +750,7 @@ Graph<VISITOR>::insertAdjacenciesForEdge(
 }
 
 template<typename VISITOR>
-inline void 
+inline void
 Graph<VISITOR>::eraseAdjacenciesForEdge(
     const std::size_t edgeIndex
 ) {
@@ -765,11 +765,11 @@ Graph<VISITOR>::eraseAdjacenciesForEdge(
     assert(it != vertex0.end());
     if (it != vertex0.end())
         vertex0.erase(it);
-    
+
     if(vertexIndex1 != vertexIndex0) { // if not a self-edge
         adj.vertex() = vertexIndex0;
         it = vertex1.find(adj);
-        assert(it != vertex1.end()); 
+        assert(it != vertex1.end());
         if (it != vertex1.end())
             vertex1.erase(it);
     }
