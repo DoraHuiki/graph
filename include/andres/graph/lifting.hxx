@@ -55,7 +55,7 @@ lift(
                     if (depth + 1 <= distanceUpperBound)
                     {
                         add = true;
-                        visited.push_back(w);
+                        visited.push_back(w); // only for resetting on line 76
                     }
 
                     if (depth > distanceLowerBound)
