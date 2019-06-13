@@ -6,6 +6,7 @@
 
 #include "andres/graph/components.hxx"
 #include "andres/graph/bridges.hxx"
+#include "andres/graph/graph.hxx"
 
 namespace andres {
 namespace graph {
@@ -159,11 +160,11 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
         }
 
         std::vector<double> const& edge_costs_;
-    };
+    }; // only choose those edges whose cost > 0 (Attractive?)
 
     // extract connected components of G^+
     ComponentsBySearch<andres::graph::Graph<>> components;
-    components.build(graph, AttractionSubgraph(edge_costs));
+    components.build(graph, AttractionSubgraph(edge_costs)); // storing component label of each vertex
 
     // create reduced graph
     andres::graph::Graph<> graph_reduced;

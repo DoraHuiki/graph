@@ -71,7 +71,7 @@ std::size_t
 labelComponents(
     const GRAPH& graph,
     const SUBGRAPH_MASK& mask,
-    ITERATOR labeling
+    ITERATOR labeling // check LegacyRandomAccessIterator in cppconference
 ) {
     std::size_t label = 0;
     std::vector<char> visited(graph.numberOfVertices());
