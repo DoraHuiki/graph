@@ -182,7 +182,7 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
         auto u = graph.vertexOfEdge(e, 0);
         auto v = graph.vertexOfEdge(e, 1);
 
-        if (!components.areConnected(u,v))
+        if (!components.areConnected(u,v)) // connected = uv in the same component
         {
             // set variable to 1 and remove edge
             cost_offset += edge_costs[e];
