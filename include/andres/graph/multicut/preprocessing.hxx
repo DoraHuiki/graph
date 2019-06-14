@@ -71,6 +71,9 @@ void contract(andres::graph::Graph<> & graph, std::vector<double> & edge_costs,
         edge_costs[f] += edge_costs[e];
         emask[e] = 1; // "remove e by masking it out"
     }
+    /* collect all adjacencies of v 
+     * transfer connection from "to v" to "to u"
+     * remove (mask out) edges of v */
     vmask[v] = 1; // "keep the first vertex (u), remove the other one (v)"
 }
 
