@@ -69,9 +69,9 @@ void contract(andres::graph::Graph<> & graph, std::vector<double> & edge_costs,
             emask.push_back(0);
         }
         edge_costs[f] += edge_costs[e];
-        emask[e] = 1;
+        emask[e] = 1; // "remove e by masking it out"
     }
-    vmask[v] = 1;
+    vmask[v] = 1; // "keep the first vertex (u), remove the other one (v)"
 }
 
 
@@ -140,6 +140,7 @@ inline void printRelativeGraphSize(size_t nVertices, size_t nEdges, size_t nOrig
 }
 
 // Remove all repulsive edges between components G^+ = (V, E^+)
+/* "repulsive" means edge_cost <= 0 ? */
 double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<double> & edge_costs,
     std::vector<std::pair<std::pair<size_t,size_t>, char>> & constr, std::vector<size_t> & vorig)
 {
@@ -164,7 +165,7 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
 
     // extract connected components of G^+
     ComponentsBySearch<andres::graph::Graph<>> components;
-    components.build(graph, AttractionSubgraph(edge_costs)); // storing component label of each vertex
+    components.build(graph, AttractionSubgraph(edge_costs)); // `components` stores component label of each vertex
 
     // create reduced graph
     andres::graph::Graph<> graph_reduced;
@@ -172,6 +173,8 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
     graph_reduced.reserveEdges(graph.numberOfEdges());
     std::vector<double> edge_costs_reduced;
     edge_costs_reduced.reserve(graph.numberOfEdges());
+    /* 1. initialize #(graph.vertices) vertices for graph_reduced
+     *    but all are disconnected */
     
     double cost_offset = 0;
     double const tolerance = std::numeric_limits<double>::epsilon();
@@ -182,7 +185,7 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
         auto u = graph.vertexOfEdge(e, 0);
         auto v = graph.vertexOfEdge(e, 1);
 
-        if (!components.areConnected(u,v)) // connected = uv in the same component
+        if (!components.areConnected(u,v)) // connected = uv in the same component = their labels are the same
         {
             // set variable to 1 and remove edge
             cost_offset += edge_costs[e];
@@ -194,6 +197,8 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
         auto e_new = graph_reduced.insertEdge(u,v);
         edge_costs_reduced.push_back(edge_costs[e]);
     }
+    /* 2. replicate edges whose cost > 0 to graph_reduced
+     *    so some vertices are connected */
 
     // delete isolated vertices
     for (size_t v = 0; v < graph_reduced.numberOfVertices(); v++)
@@ -204,6 +209,8 @@ double extractIsolatedComponents(andres::graph::Graph<> & graph, std::vector<dou
             graph_reduced.eraseVertex(v);
             v--;
         }
+    /* 3. remove vertices that don't have any edges
+     *    so called "isolated" */
 
     // set return values
     graph = graph_reduced;
@@ -459,6 +466,7 @@ preprocessing(GRAPH const& graph_orig, ECA const& edgeCosts, size_t timeLimitSec
     {
         nEdgesPrev = nEdges;
         total_cost_offset += extractIsolatedComponents(graph, edge_costs, constr, vorig);
+        /* components that are connected by edges with positive cost */
 
         nEdges = graph.numberOfEdges();
         nVertices = graph.numberOfVertices();

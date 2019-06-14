@@ -73,7 +73,8 @@ labelComponents(
     const SUBGRAPH_MASK& mask,
     ITERATOR labeling // check LegacyRandomAccessIterator in cppconference
 ) {
-    std::size_t label = 0;
+    std::size_t label = 0; // ???: label starts with zero
+                           // won't the first component mess up with the masked-out vertices?
     std::vector<char> visited(graph.numberOfVertices());
     std::queue<std::size_t> queue;
     for(std::size_t v = 0; v < graph.numberOfVertices(); ++v) {
@@ -100,7 +101,7 @@ labelComponents(
             }
         }
         else {
-            labeling[v] = 0;
+            labeling[v] = 0; // See the question in Line 76
         }
     }
     return label;
