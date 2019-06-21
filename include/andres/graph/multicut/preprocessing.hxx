@@ -469,7 +469,10 @@ preprocessing(GRAPH const& graph_orig, ECA const& edgeCosts, size_t timeLimitSec
     {
         nEdgesPrev = nEdges;
         total_cost_offset += extractIsolatedComponents(graph, edge_costs, constr, vorig);
-        /* components that are connected by edges with positive cost */
+
+        /* graph is reduced and only contains components that are connected by edges with positive cost
+         * `graph` and `edge_costs` are updated to reduced version
+         * `total_cost_offset` = sum of cost of all removed edges */
 
         nEdges = graph.numberOfEdges();
         nVertices = graph.numberOfVertices();

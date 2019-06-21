@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <set>
 #include <vector>
+#include <limits>
+#include <algorithm>
 
 #include "../complete-graph.hxx"
 
@@ -705,6 +707,8 @@ auto kernighanLin(const CompleteGraph<GraphVisitor>& graph, const ECA& edge_cost
 
 
 // functions for back compatability with old interface that works with edge labels
+// ELA: Edge Label Array?
+// ECA: Edge Cost Array?
 template<typename GRAPH, typename ECA, typename ELA>
 inline
 void kernighanLin(const GRAPH& graph, const ECA& edge_costs, const ELA& input_edge_labels, ELA& output_edge_labels, const KernighanLinSettings settings = KernighanLinSettings())
@@ -751,6 +755,7 @@ void kernighanLin(const GRAPH& graph, const ECA& edge_costs, const ELA& input_ed
 
             ++label;
         }
+    /* depth first search? */
 
     vertex_labels = kernighanLin(graph, edge_costs, vertex_labels, visitor, settings);
 
